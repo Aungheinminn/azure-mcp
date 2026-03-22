@@ -36,3 +36,7 @@ export async function getApi(serverUrl: string): Promise<vm.WebApi> {
 export function getProjectName() {
   return getEnv("AZURE_DEVOPS_PROJECT_NAME");
 }
+
+export function getOrganizationName() {
+  return getEnv("AZURE_DEVOPS_ORGANIZATION_NAME");
+}
