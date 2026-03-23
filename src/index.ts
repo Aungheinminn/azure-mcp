@@ -8,6 +8,7 @@ const server = new McpServer({
 });
 
 registerTools.registerWorkItemTools(server);
+registerTools.registerPullRequestTools(server);
 
 async function main() {
   const transport = new StdioServerTransport();

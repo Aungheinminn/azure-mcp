@@ -9,6 +9,7 @@ Connects MCP clients (like Claude Desktop or OpenCode) to Azure DevOps so you ca
 - Handle pull requests
 - Add comments
 - Query stuff with WIQL
+- Manage sprint iterations
 
 ## Setup
 
@@ -38,6 +39,10 @@ npm run build
 - `get_workitem_revisions` - Change history
 - `get_workitem_types` - List work item types
 
+### Iterations
+- `get_current_iteration` - Get the current sprint iteration
+- `get_iterations` - Get all iterations (past, current, future)
+
 ### Pull Requests
 - `create_pullrequest` - Create PRs
 - `get_pullrequest` / `list_pullrequests` - Get PRs
@@ -45,3 +50,5 @@ npm run build
 - `create_pullrequest_thread` / `get_pullrequest_threads` - PR comments
 - `add_pullrequest_reviewer` / `get_pullrequest_reviewers` - Reviewers
 - `get_pullrequest_status` - Check build/branch policies
+
+
