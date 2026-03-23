@@ -21,7 +21,7 @@ Analyze the raw code changes to generate:
 - **AssignedTo:** `author email`
 - **State:** Done
 - **Area:** `area name`
-- **Iteration:** Current (Fallback: `add actual iteration name`)
+- **Iteration:** Call `getCurrentIteration` to set the iteration path  (Example Format: `add actual iteration name`)
 - **Priority:** 2
 
 ## 4. Execution Workflow

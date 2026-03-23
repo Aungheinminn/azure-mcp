@@ -12,6 +12,8 @@ import {
   WorkItemType,
 } from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces.js";
 
+import { TeamSettingsIteration } from "azure-devops-node-api/interfaces/WorkInterfaces.js";
+
 export type CreateWorkItemType = {
   title: string;
   type: string;
@@ -273,6 +275,86 @@ export type QueryWorkItemsType = {
   top?: number;
 };
 
+/**
+ * Gets the current iteration for the default team in the project.
+ * The current iteration is determined by checking the `attributes.timeFrame` property
+ * where 1 indicates the current active iteration.
+ * @returns {Promise<TeamSettingsIteration>} The current team iteration
+ * @throws {Error} If retrieving iterations fails
+ * @see {@link getIterations} To get all iterations with their timeFrame values
+ *
+ * @example
+ * // Returns iteration with timeFrame = 1 (current)
+ * const currentIteration = await getCurrentIteration();
+ * // currentIteration.attributes.timeFrame === 1
+ *
+ * // TimeFrame values:
+ * // 0 = Past (iteration end date is before today)
+ * // 1 = Current (today falls within iteration dates)
+ * // 2 = Future (iteration start date is after today)
+ */
+export const getCurrentIteration = async (): Promise<
+  TeamSettingsIteration
+> => {
+  const projectId = getProjectName();
+  const webApi = await getWebApi();
+  const workApi = await webApi.getWorkApi();
+  const coreApi = await webApi.getCoreApi();
+
+  const project = await coreApi.getProject(projectId);
+  const teamContext = {
+    project: project.name,
+    projectId: project.id,
+    team: project.defaultTeam?.name,
+    teamId: project.defaultTeam?.id,
+  };
+
+  const iterations = await workApi.getTeamIterations(teamContext);
+  const currentIteration = iterations.find(
+    (iteration) => iteration.attributes?.timeFrame === 1,
+  );
+  return currentIteration as TeamSettingsIteration;
+};
+
+
+
+/**
+ * Gets all iterations for the default team in the project.
+ * Returns past, current, and future iterations with their timeFrame indicators.
+ * @returns {Promise<TeamSettingsIteration[]>} Array of all team iterations
+ * @throws {Error} If retrieving iterations fails
+ * @see {@link getCurrentIteration} To get only the current iteration
+ *
+ * @example
+ * const iterations = await getIterations();
+ * const current = iterations.find(i => i.attributes?.timeFrame === 1);
+ * const past = iterations.filter(i => i.attributes?.timeFrame === 0);
+ * const future = iterations.filter(i => i.attributes?.timeFrame === 2);
+ *
+ * // TimeFrame values:
+ * // 0 = Past (iteration end date is before today)
+ * // 1 = Current (today falls within iteration dates)
+ * // 2 = Future (iteration start date is after today)
+ */
+export const getIterations = async (): Promise<
+  TeamSettingsIteration[]
+> => {
+  const projectId = getProjectName();
+  const webApi = await getWebApi();
+  const workApi = await webApi.getWorkApi();
+  const coreApi = await webApi.getCoreApi();
+
+  const project = await coreApi.getProject(projectId);
+  const teamContext = {
+    project: project.name,
+    projectId: project.id,
+    team: project.defaultTeam?.name,
+    teamId: project.defaultTeam?.id,
+  };
+
+  const iterations = await workApi.getTeamIterations(teamContext);
+  return iterations;
+};
 /**
  * Queries work items using WIQL (Work Item Query Language).
  * @param {QueryWorkItemsType} params - The query parameters

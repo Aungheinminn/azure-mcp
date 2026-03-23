@@ -10,6 +10,8 @@ import {
   getWorkItemComments,
   getWorkItemRevisions,
   getWorkItemTypes,
+  getCurrentIteration,
+  getIterations,
 } from "../tools/workItem.js";
 
 export const workItemTools = [
@@ -177,5 +179,21 @@ export const workItemTools = [
       }),
     },
     execute: getWorkItemTypes,
+  },
+  {
+    toolName: "get_current_iteration",
+    details: {
+      description: "Get the current iteration for the default team in Azure DevOps",
+      inputSchema: z.object({}),
+    },
+    execute: getCurrentIteration,
+  },
+  {
+    toolName: "get_iterations",
+    details: {
+      description: "Get all iterations (past, current, and future) for the default team in Azure DevOps",
+      inputSchema: z.object({}),
+    },
+    execute: getIterations,
   },
 ];
