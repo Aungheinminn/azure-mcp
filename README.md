@@ -38,8 +38,6 @@ npm run build
 - `add_workitem_comment` / `get_workitem_comments` - Comments
 - `get_workitem_revisions` - Change history
 - `get_workitem_types` - List work item types
-
-### Iterations
 - `get_current_iteration` - Get the current sprint iteration
 - `get_iterations` - Get all iterations (past, current, future)
 
