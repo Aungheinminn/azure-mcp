@@ -35,6 +35,15 @@ export const pullRequestTools = [
           .array(z.string())
           .optional()
           .describe("Array of reviewer IDs or email addresses"),
+        workItemRefs: z
+          .array(
+            z.object({
+              id: z.string().describe("The work item ID"),
+              url: z.string().describe("The work item URL"),
+            })
+          )
+          .optional()
+          .describe("Array of work items to associate with the PR"),
         isDraft: z
           .boolean()
           .optional()

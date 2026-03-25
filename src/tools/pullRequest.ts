@@ -14,6 +14,10 @@ export type CreatePullRequestType = {
   title: string;
   description?: string;
   reviewers?: string[];
+  workItemRefs?: {
+    id: string;
+    url: string;
+  }[];
   isDraft?: boolean;
   autoComplete?: boolean;
 };
@@ -27,6 +31,9 @@ export type CreatePullRequestType = {
  * @param {string} params.title - The title of the pull request
  * @param {string} [params.description] - The description of the pull request
  * @param {string[]} [params.reviewers] - Array of reviewer IDs or email addresses
+ * @param {Object[]} [params.workItemRefs] - Array of work items to associate with the PR
+ * @param {string} params.workItemRefs[].id - The work item ID
+ * @param {string} params.workItemRefs[].url - The work item URL
  * @param {boolean} [params.isDraft] - Whether the pull request is a draft
  * @param {boolean} [params.autoComplete] - Set to true to auto-complete the PR when all policies pass
  * @returns {Promise<GitPullRequest>} The created pull request
@@ -39,6 +46,7 @@ export const createPullRequest = async ({
   title,
   description,
   reviewers,
+  workItemRefs,
   isDraft,
   autoComplete,
 }: CreatePullRequestType): Promise<GitPullRequest> => {
@@ -65,6 +73,10 @@ export const createPullRequest = async ({
     pullRequest.autoCompleteSetBy = {
       id: "",
     };
+  }
+
+  if(workItemRefs && workItemRefs.length > 0) {
+    pullRequest.workItemRefs = workItemRefs;
   }
 
   const createdPR = await gitApi.createPullRequest(pullRequest, repositoryId, projectId);
