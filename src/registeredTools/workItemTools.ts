@@ -12,6 +12,7 @@ import {
   getWorkItemTypes,
   getCurrentIteration,
   getIterations,
+  deleteWorkItem,
 } from "../tools/workItem.js";
 
 export const workItemTools = [
@@ -195,5 +196,15 @@ export const workItemTools = [
       inputSchema: z.object({}),
     },
     execute: getIterations,
+  },
+  {
+    toolName: "delete_workitem",
+    details: {
+      description: "Delete a work item in Azure DevOps",
+      inputSchema: z.object({
+        id: z.number().describe("The ID of the work item to delete"),
+      }),
+    },
+    execute: deleteWorkItem,
   },
 ];

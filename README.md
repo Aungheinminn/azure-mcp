@@ -40,6 +40,7 @@ npm run build
 - `get_workitem_types` - List work item types
 - `get_current_iteration` - Get the current sprint iteration
 - `get_iterations` - Get all iterations (past, current, future)
+- `delete_workitem` - Delete a work item by ID
 
 ### Pull Requests
 - `create_pullrequest` - Create PRs

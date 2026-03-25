@@ -15,9 +15,12 @@ export async function getWebApi(serverUrl?: string): Promise<vm.WebApi> {
 
 export async function getApi(serverUrl: string): Promise<vm.WebApi> {
   try {
+    let organizationId = getOrganizationName();
     let token = getEnv("AZURE_DEVOPS_PAT");
+
+    const server = `${serverUrl}/${organizationId}`;
     let authHandler = vm.getPersonalAccessTokenHandler(token);
-    let vsts: vm.WebApi = new vm.WebApi(serverUrl, authHandler);
+    let vsts: vm.WebApi = new vm.WebApi(server, authHandler);
     await vsts.connect();
 
     return vsts;

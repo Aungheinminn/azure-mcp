@@ -5,6 +5,7 @@ import {
 import { getOrganizationName, getProjectName, getWebApi } from "../client.js";
 import {
   WorkItem,
+  WorkItemDelete,
   Wiql,
   WorkItemQueryResult,
   Comment,
@@ -293,9 +294,7 @@ export type QueryWorkItemsType = {
  * // 1 = Current (today falls within iteration dates)
  * // 2 = Future (iteration start date is after today)
  */
-export const getCurrentIteration = async (): Promise<
-  TeamSettingsIteration
-> => {
+export const getCurrentIteration = async (): Promise<TeamSettingsIteration> => {
   const projectId = getProjectName();
   const webApi = await getWebApi();
   const workApi = await webApi.getWorkApi();
@@ -316,8 +315,6 @@ export const getCurrentIteration = async (): Promise<
   return currentIteration as TeamSettingsIteration;
 };
 
-
-
 /**
  * Gets all iterations for the default team in the project.
  * Returns past, current, and future iterations with their timeFrame indicators.
@@ -336,9 +333,7 @@ export const getCurrentIteration = async (): Promise<
  * // 1 = Current (today falls within iteration dates)
  * // 2 = Future (iteration start date is after today)
  */
-export const getIterations = async (): Promise<
-  TeamSettingsIteration[]
-> => {
+export const getIterations = async (): Promise<TeamSettingsIteration[]> => {
   const projectId = getProjectName();
   const webApi = await getWebApi();
   const workApi = await webApi.getWorkApi();
@@ -481,3 +476,25 @@ export const getWorkItemTypes = async ({
   const workItemTypes = await witApi.getWorkItemTypes(projectId);
   return workItemTypes;
 };
+
+export type DeleteWorkItemType = {
+  id: number;
+};
+
+/**
+ * Deletes a work item by its ID.
+ * @param {DeleteWorkItemType} params - The delete work item parameters
+ * @param {number} params.id - The ID of the work item to delete
+ * @returns {Promise<WorkItemDelete>} The deleted work item information
+ * @throws {Error} If the work item deletion fails
+ */
+export const deleteWorkItem = async ({
+  id,
+}: DeleteWorkItemType): Promise<WorkItemDelete> => {
+  const projectId = getProjectName();
+  const webApi = await getWebApi();
+  const witApi = await webApi.getWorkItemTrackingApi();
+
+  const workItem = await witApi.deleteWorkItem(id, projectId);
+  return workItem;
+}
